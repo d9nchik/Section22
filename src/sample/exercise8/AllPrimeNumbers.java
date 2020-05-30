@@ -1,16 +1,14 @@
 package sample.exercise8;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.util.Arrays;
 
 public class AllPrimeNumbers {
     private static final File FILE = new File("primeNumbers.dat");
-    private static final int SIZE_OF_READ_BLOCK = 10_000;
+    private static final int SIZE_OF_READ_BLOCK = 15_000_000;
     private static final long MAX_NUMBER = 10_000_000_000L;
-    private static final int SIZE_OF_WRITE_BLOCK = 1_000;
+    private static final int SIZE_OF_WRITE_BLOCK = 5_000_000;
+    private static long[] primeNumbers = numbers(0);
 
     public static void main(String[] args) {
 
@@ -54,8 +52,8 @@ public class AllPrimeNumbers {
 
             // Check whether the next number is prime
             number++;
-            if (number % 10_000 == 0)
-                System.out.println(number);
+            if (number % 1_000_000 == 0)
+                System.out.println(number / 1_000_000 + "*10^6");
         }
 
         writeNumbers(Arrays.copyOfRange(array, 0, position));
@@ -64,7 +62,7 @@ public class AllPrimeNumbers {
     }
 
     private static boolean isPrime(long number, long squareRoot) {
-        long[] primeNumbers = numbers(0);
+        boolean toStart = false;
         int positionInFile = 0;
         int primeNumberPosition = 0;
         while (primeNumbers.length != 0 && primeNumbers[primeNumberPosition] <= squareRoot) {
@@ -76,7 +74,10 @@ public class AllPrimeNumbers {
                 positionInFile += SIZE_OF_READ_BLOCK;
                 primeNumbers = numbers(positionInFile);
                 primeNumberPosition = 0;
+                toStart = true;
             }
+            if (toStart)
+                primeNumbers = numbers(0);
         }
         return true;
     }
@@ -109,8 +110,8 @@ public class AllPrimeNumbers {
     }
 
     private static void writeNumbers(long[] numbers) {
-        try (RandomAccessFile output = new RandomAccessFile(FILE, "rw")) {
-            output.seek(output.length());
+        try (DataOutputStream output = new DataOutputStream(new BufferedOutputStream(
+                new FileOutputStream(FILE, true), 102_400))) {
             for (long number : numbers)
                 output.writeLong(number);
         } catch (FileNotFoundException ex) {
@@ -118,5 +119,7 @@ public class AllPrimeNumbers {
         } catch (IOException ex) {
             System.out.println("Problem with stream!");
         }
+        if (primeNumbers.length < SIZE_OF_WRITE_BLOCK)
+            primeNumbers = numbers(0);
     }
 }
