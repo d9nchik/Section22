@@ -4,14 +4,11 @@ import java.util.Arrays;
 
 public class ExecutionTimeOfPrimeNumbers {
     public static void primeNumbersListing5(int n) {
-        final int NUMBER_PER_LINE = 10; // Display 10 per line
-        int count = 0; // Count the number of prime numbers
         int number = 2; // A number to be tested for primeness
 
         // Repeatedly find prime numbers
         while (number <= n) {
             // Assume the number is prime
-            boolean isPrime = true; // Is the current number prime?
 
             // Test if number is prime
             for (int divisor = 2; divisor <= (int) (Math.sqrt(number));
@@ -30,7 +27,6 @@ public class ExecutionTimeOfPrimeNumbers {
         java.util.List<Integer> list =
                 new java.util.ArrayList<>();
 
-        int count = 0; // Count the number of prime numbers
         int number = 2; // A number to be tested for primeness
         int squareRoot = 1; // Check whether number <= squareRoot
 
@@ -53,7 +49,6 @@ public class ExecutionTimeOfPrimeNumbers {
 
             // Print the prime number and increase the count
             if (isPrime) {
-                count++; // Increase the count
                 list.add(number); // Add a new prime to the list
             }
 
