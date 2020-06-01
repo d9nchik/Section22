@@ -8,8 +8,6 @@ public class ExecutionTimeOfPrimeNumbers {
         int count = 0; // Count the number of prime numbers
         int number = 2; // A number to be tested for primeness
 
-        System.out.println("The prime numbers are:");
-
         // Repeatedly find prime numbers
         while (number <= n) {
             // Assume the number is prime
@@ -19,20 +17,8 @@ public class ExecutionTimeOfPrimeNumbers {
             for (int divisor = 2; divisor <= (int) (Math.sqrt(number));
                  divisor++) {
                 if (number % divisor == 0) { // If true, number is not prime
-                    isPrime = false; // Set isPrime to false
                     break; // Exit the for loop
                 }
-            }
-
-            // Print the prime number and increase the count
-            if (isPrime) {
-                count++; // Increase the count
-
-                if (count % NUMBER_PER_LINE == 0) {
-                    // Print the number and advance to the new line
-                    System.out.printf("%7d\n", number);
-                } else
-                    System.out.printf("%7d", number);
             }
 
             // Check if the next number is prime
@@ -44,12 +30,10 @@ public class ExecutionTimeOfPrimeNumbers {
         java.util.List<Integer> list =
                 new java.util.ArrayList<>();
 
-        final int NUMBER_PER_LINE = 10; // Display 10 per line
         int count = 0; // Count the number of prime numbers
         int number = 2; // A number to be tested for primeness
         int squareRoot = 1; // Check whether number <= squareRoot
 
-        System.out.println("The prime numbers are \n");
 
         // Repeatedly find prime numbers
         while (number <= n) {
@@ -71,11 +55,6 @@ public class ExecutionTimeOfPrimeNumbers {
             if (isPrime) {
                 count++; // Increase the count
                 list.add(number); // Add a new prime to the list
-                if (count % NUMBER_PER_LINE == 0) {
-                    // Print the number and advance to the new line
-                    System.out.println(number);
-                } else
-                    System.out.print(number + " ");
             }
 
             // Check whether the next number is prime
@@ -97,17 +76,38 @@ public class ExecutionTimeOfPrimeNumbers {
             }
         }
 
-        final int NUMBER_PER_LINE = 10; // Display 10 per line
-        int count = 0; // Count the number of prime numbers found so far
-        // Print prime numbers
-        for (int i = 2; i < primes.length; i++) {
-            if (primes[i]) {
-                count++;
-                if (count % NUMBER_PER_LINE == 0)
-                    System.out.printf("%7d\n", i);
-                else
-                    System.out.printf("%7d", i);
-            }
-        }
     }
+
+    private static final int[] testNumbers = {9, 11, 13, 15, 17, 19};
+
+    private static void showTable(PrimeNumbers primeNumbers) {
+
+        for (int testNumber : testNumbers) {
+            long startTime = System.currentTimeMillis();
+            primeNumbers.calculate(testNumber * 1_000_000);
+            System.out.printf("%-9d", (System.currentTimeMillis() - startTime));
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        System.out.printf("%-13s", "");
+        for (int number : testNumbers) {
+            System.out.printf("%-9d", number * 1_000_000);
+        }
+        System.out.println();
+        System.out.printf("%-13s", "Listing 22.5");
+        showTable(ExecutionTimeOfPrimeNumbers::primeNumbersListing5);
+        System.out.printf("%-13s", "Listing 22.6");
+        showTable(ExecutionTimeOfPrimeNumbers::primeNumbersListing6);
+        System.out.printf("%-13s", "Listing 22.7");
+        showTable(ExecutionTimeOfPrimeNumbers::primeNumbersListing7);
+    }
+
+    @FunctionalInterface
+    interface PrimeNumbers {
+        void calculate(int number);
+    }
+
+
 }
