@@ -67,6 +67,8 @@ public class AllPrimeNumbers {
         int primeNumberPosition = 0;
         while (primeNumbers.length != 0 && primeNumbers[primeNumberPosition] <= squareRoot) {
             if (number % primeNumbers[primeNumberPosition] == 0) {
+                if (toStart)
+                    primeNumbers = numbers(0);
                 return false;
             }
             primeNumberPosition++;
@@ -76,17 +78,18 @@ public class AllPrimeNumbers {
                 primeNumberPosition = 0;
                 toStart = true;
             }
-            if (toStart)
-                primeNumbers = numbers(0);
+
         }
+        if (toStart)
+            primeNumbers = numbers(0);
         return true;
     }
 
     private static long[] numbers(int pos) {
         try (RandomAccessFile input = new RandomAccessFile(FILE, "r")) {
-            input.seek(pos);
-            long size = Math.min(SIZE_OF_READ_BLOCK, input.length() - pos);
-            long[] array = new long[SIZE_OF_READ_BLOCK];
+            input.seek(pos * 8);
+            int size = Math.min(SIZE_OF_READ_BLOCK, ((int) (input.length() / 8 - pos)));
+            long[] array = new long[size];
             for (int i = 0; i < size; i++) {
                 array[i] = input.readLong();
             }
