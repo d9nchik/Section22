@@ -62,12 +62,11 @@ public class AllPrimeNumbers {
     }
 
     private static boolean isPrime(long number, long squareRoot) {
-        boolean toStart = false;
         int positionInFile = 0;
         int primeNumberPosition = 0;
         while (primeNumbers.length != 0 && primeNumbers[primeNumberPosition] <= squareRoot) {
             if (number % primeNumbers[primeNumberPosition] == 0) {
-                if (toStart)
+                if (positionInFile != 0)
                     primeNumbers = numbers(0);
                 return false;
             }
@@ -76,11 +75,9 @@ public class AllPrimeNumbers {
                 positionInFile += SIZE_OF_READ_BLOCK;
                 primeNumbers = numbers(positionInFile);
                 primeNumberPosition = 0;
-                toStart = true;
             }
-
         }
-        if (toStart)
+        if (positionInFile != 0)
             primeNumbers = numbers(0);
         return true;
     }
